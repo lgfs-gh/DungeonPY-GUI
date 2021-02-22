@@ -10,7 +10,8 @@ class Monstro:
                  defesa: int,
                  pocoes_drop,
                  itens_drop,
-                 experiencia_drop) -> None:
+                 experiencia_drop,
+                 local: str) -> None:
         self.__nome: str = nome
         self.__vida: int = vida
         self.__ataque: int = ataque
@@ -18,6 +19,7 @@ class Monstro:
         self.__pocoes_drop: list = pocoes_drop
         self.__itens_drop: int = itens_drop
         self.__experiencia_drop: int = experiencia_drop
+        self.__local: str = local
 
     @property
     def nome(self) -> str:
@@ -42,6 +44,10 @@ class Monstro:
     @property
     def pocoes_drop(self) -> int:
         return self.__pocoes_drop
+
+    @property
+    def local(self) -> str:
+        return self.__local
 
     @property
     def itens_drop(self) -> int:
@@ -85,7 +91,7 @@ def gerar_monstro():
                                      'Cemitério',
                                      'Fortaleza',
                                      'Floresta Escura',
-                                     'Ruina Amaldiçoada,'
+                                     'Ruina Amaldiçoada',
                                      'Pântano',
                                      'Caverna profunda'],
                     'locais_dificil': ['Vulcão',
@@ -112,8 +118,9 @@ def gerar_monstro():
                           defesa=monstro_defesa,
                           pocoes_drop=monstro_p_drop_chance,
                           itens_drop=monstro_i_drop_chance,
-                          experiencia_drop=monstro_experiencia_drop)
-        return monstro, monstro_local
+                          experiencia_drop=monstro_experiencia_drop,
+                          local=monstro_local)
+        return monstro
 
         # ---------------- DIFICULDADE: MÉDIA ---------------- #
     elif dificuldade in range(71, 90):
@@ -132,8 +139,9 @@ def gerar_monstro():
                           defesa=monstro_defesa,
                           pocoes_drop=monstro_p_drop_chance,
                           itens_drop=monstro_i_drop_chance,
-                          experiencia_drop=monstro_experiencia_drop)
-        return monstro, monstro_local
+                          experiencia_drop=monstro_experiencia_drop,
+                          local=monstro_local)
+        return monstro
 
     # ---------------- DIFICULDADE: DIFÍCIL ---------------- #
     else:
@@ -152,5 +160,6 @@ def gerar_monstro():
                           defesa=monstro_defesa,
                           pocoes_drop=monstro_p_drop_chance,
                           itens_drop=monstro_i_drop_chance,
-                          experiencia_drop=monstro_experiencia_drop)
-        return monstro, monstro_local
+                          experiencia_drop=monstro_experiencia_drop,
+                          local=monstro_local)
+        return monstro

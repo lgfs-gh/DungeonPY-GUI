@@ -8,6 +8,8 @@ class Jogador:
         self.__pocoes: int = 0
         self.__monstros_derrotados: int = 0
         self.__itens_coletados: int = 0
+        self.__fugas_sucesso: int = 0
+        self.__fugas_falha: int = 0
         self.__experiencia: int = 0
         self.__nivel: int = 0
         self.__mochila: list = ['algo', 'algo2']
@@ -63,6 +65,22 @@ class Jogador:
     @itens_coletados.setter
     def itens_coletados(self, valor):
         self.__itens_coletados = valor
+
+    @property
+    def fugas_sucesso(self):
+        return self.__fugas_sucesso
+
+    @fugas_sucesso.setter
+    def fugas_sucesso(self, valor):
+        self.__fugas_sucesso = valor
+
+    @property
+    def fugas_falha(self):
+        return self.__fugas_falha
+
+    @fugas_falha.setter
+    def fugas_falha(self, valor):
+        self.__fugas_falha = valor
 
     @property
     def experiencia(self) -> int:

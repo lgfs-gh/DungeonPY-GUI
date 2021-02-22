@@ -1,13 +1,13 @@
 from random import choice, randint
+from time import sleep
 
 import PySimpleGUI as sg
 from jogador import Jogador
 from monstro import gerar_monstro
 
-
 # ----- Varieveis Teste ------ #
 jogador = None
-monstro, local = gerar_monstro()
+monstro = gerar_monstro()
 
 
 # --------- SISTEMA DE BATALHA ---------- #
@@ -52,6 +52,7 @@ def main():
 def game():
     # -------- VARIAVEIS ----------- #
     global jogador
+    global monstro
 
     # ------------ IMAGENS ------------- #
     layout_player_imagem = [
@@ -112,10 +113,15 @@ def game():
     ]
     # ------------ INFORMACOES DE BATALHA ------------- #
     layout_local_batalha = [
-        [sg.Text('INSIRA O LOCAL DE BATALHA AQUI!')]
+        [sg.Text(f'Você está num(a) {monstro.local}',
+                 size=(40, 2),
+                 justification='c',
+                 key='_local_')]
     ]
     layout_informacoes_batalha = [
-        [sg.Text('INSIRA INFORMAÇÕES DE DANO!\n\n\n\n\n', key='_info_batalha_')]
+        [sg.Text(f'Você se depara com um(a) {monstro.nome}', key='_info_batalha_',
+                 justification='c',
+                 size=(40, 5))]
     ]
     layout_escolhas = [
         [sg.Button(button_text='Lutar', key='_lutar_', disabled=False),
@@ -135,11 +141,15 @@ def game():
         [sg.Frame(title='FUNDO IMAGEM!',
                   layout=layout_fundo_imagem)],
         [sg.Frame(title='BATALHA INFO',
+                  element_justification='c',
                   layout=layout_batalha_info)]
     ]
     # ------------ MONSTRO STATUS ------------- #
     layout_monstro_status = [
-        [sg.Text(f'Nome: {monstro.nome}')],
+        [sg.Text(f'Nome: {monstro.nome}',
+                 size=(30, 1),
+                 justification='c',
+                 key='_m_nome_')],
         [sg.Text(f'Vida: {monstro.vida}',
                  key='_m_vida_')],
         [sg.Text(f'Ataque: {monstro.ataque}',
@@ -148,7 +158,8 @@ def game():
                  key='_m_def_')]
     ]
     layout_monstro_info = [
-        [sg.Frame(title='# ---- STATUS ---- #',
+        [sg.Frame(title='STATUS',
+                  title_location='n',
                   element_justification='c',
                   border_width=0,
                   layout=layout_monstro_status)]
@@ -157,6 +168,7 @@ def game():
         [sg.Frame(title='MONSTRO IMAGEM!',
                   layout=layout_monstro_imagem)],
         [sg.Frame(title='MONSTRO INFO!',
+                  element_justification='c',
                   layout=layout_monstro_info)]
     ]
 
@@ -191,13 +203,15 @@ def game():
         if event == '_mostrar_status_':
             window.FindElement('_player_mochila_').Update(visible=False)
             window.FindElement('_player_status_').Update(visible=True)
-        # ----------- EVENTOS BATALHA -------------- #
+        # =========================== EVENTOS BATALHA =========================== #
+        # ------------- ESCOLHENDO LUTAR ------------- #
         if event == '_lutar_':
             window.FindElement('_lutar_').Update(disabled=True)
             window.FindElement('_fugir_').Update(disabled=True)
             window.FindElement('_ok_').Update(disabled=False)
-            window.FindElement('_info_batalha_').\
+            window.FindElement('_info_batalha_'). \
                 Update(value=f'Você entrou em batalha com {monstro.nome}!')
+        # ------------- ESCOLHENDO FUGIR ------------- #
         if event == '_fugir_':
             window.FindElement('_lutar_').Update(disabled=True)
             window.FindElement('_fugir_').Update(disabled=True)
@@ -205,16 +219,29 @@ def game():
             sucesso = randint(1, 6)
             if sucesso in range(1, 4):
                 # FUGIU COM SUCESSO
+                jogador.fugas_sucesso += 1
                 window.FindElement('_lutar_').Update(disabled=False)
                 window.FindElement('_fugir_').Update(disabled=False)
                 window.FindElement('_ok_').Update(disabled=True)
-                window.FindElement('_info_batalha_').Update(value='Fugiu com sucesso!')
+                sg.popup_quick('Você fugiu com sucesso!')
+                monstro = gerar_monstro()
+                window.FindElement('_m_nome_').Update(value=f'Nome: {monstro.nome}')
+                window.FindElement('_m_vida_').Update(value=f'Vida: {monstro.vida}')
+                window.FindElement('_m_atk_').Update(value=f'Ataque: {monstro.ataque}')
+                window.FindElement('_m_def_').Update(value=f'Defesa: {monstro.defesa}')
+                window.FindElement('_local_').Update(value=f'Você está num(a) {monstro.local}')
+                window.FindElement('_info_batalha_').Update(value=f'Você se depara com um(a) {monstro.nome}')
             else:
+                # FALHOU EM FUGIR
+                jogador.fugas_falha += 1
                 window.FindElement('_lutar_').Update(disabled=True)
                 window.FindElement('_fugir_').Update(disabled=True)
                 window.FindElement('_ok_').Update(disabled=False)
-                window.FindElement('_info_batalha_').Update(value=f'Você foi apanhado por {monstro.nome}!')
+                sg.popup_quick('Você falhou em fugir!')
+                window.FindElement('_info_batalha_'). \
+                    Update(value=f'Você foi apanhado por {monstro.nome}!')
 
+        # ------------- LUTANDO ------------- #
         if event == '_ok_':
             if jogador.vida > 0:
                 if monstro.vida > 0:
@@ -229,43 +256,63 @@ def game():
                         dano2 = monstro_ataque - player_defesa
                         monstro.vida -= dano
                         jogador.vida -= dano2
-                        window.FindElement('_info_batalha_').\
-                            Update(value=f'Você deu {dano} de dano em {monstro.nome}!\n'
+                        window.FindElement('_info_batalha_'). \
+                            Update(value=f'Você deu {dano} de dano em {monstro.nome}!\n\n'
                                          f'{monstro.nome} deu um dano de {dano} em você!')
-                        window.FindElement('_m_vida_').\
+                        window.FindElement('_m_vida_'). \
                             Update(value=f'Vida: {monstro.vida}')
-                        window.FindElement('_p_vida_').\
+                        window.FindElement('_p_vida_'). \
                             Update(value=f'Vida: {jogador.vida}')
                     elif player_ataque > monstro_defesa and monstro_ataque <= player_defesa:
                         dano = player_ataque - monstro_defesa
                         monstro.vida -= dano
-                        window.FindElement('_info_batalha_').\
-                            Update(value=f'Você deu {dano} de dano em {monstro.nome}!\n'
+                        window.FindElement('_info_batalha_'). \
+                            Update(value=f'Você deu {dano} de dano em {monstro.nome}!\n\n'
                                          f'Você defendeu o ataque de {monstro.nome}!')
-                        window.FindElement('_m_vida_').\
+                        window.FindElement('_m_vida_'). \
                             Update(value=f'Vida: {monstro.vida}')
                     elif player_ataque <= monstro_defesa and monstro_ataque > player_defesa:
                         dano = monstro_ataque - player_defesa
                         jogador.vida -= dano
-                        window.FindElement('_info_batalha_').\
-                            Update(value=f'{monstro.nome} defendeu seu ataque!\n'
+                        window.FindElement('_info_batalha_'). \
+                            Update(value=f'{monstro.nome} defendeu seu ataque!\n\n'
                                          f'{monstro.nome} deu um dano de {dano} em você!')
-                        window.FindElement('_p_vida_').\
+                        window.FindElement('_p_vida_'). \
                             Update(value=f'Vida: {jogador.vida}')
                     elif player_ataque <= monstro_defesa and monstro_ataque <= player_defesa:
-                        window.FindElement('_info_batalha_').\
-                            Update(value=f'Você defendeu o ataque de {monstro.nome}!\n'
+                        window.FindElement('_info_batalha_'). \
+                            Update(value=f'Você defendeu o ataque de {monstro.nome}!\n\n'
                                          f'{monstro.nome} defendeu seu ataque!')
                 else:
+                    # ------------ ADICIONANDO XP/ITEM/DROP E MOSTRANDO ------------ #
                     jogador.monstros_derrotados += 1
                     jogador.experiencia += monstro.experiencia_drop
-                    window.FindElement('_info_batalha_'). \
-                        Update(value=f'Você derrotou {monstro.nome}!\n'
-                                     f'Você recebeu {monstro.experiencia_drop} XP!\n'
-                                     f'Você recebeu {monstro.pocoes_drop} POÇÕES\n'
-                                     f'Você recebeu o item: {monstro.itens_drop}')
+                    sg.popup(f'Você derrotou {monstro.nome}!\n'
+                             f'Você recebeu {monstro.experiencia_drop} XP!\n'
+                             f'Você recebeu {monstro.pocoes_drop} POÇÕES\n'
+                             f'Você recebeu o item: {monstro.itens_drop}')
+
+                    # ---------- GERANDO A PROXIMA BATALHA ----------- #
+                    monstro = gerar_monstro()
+                    window.FindElement('_m_nome_').Update(value=f'Nome: {monstro.nome}')
+                    window.FindElement('_m_vida_').Update(value=f'Vida: {monstro.vida}')
+                    window.FindElement('_m_atk_').Update(value=f'Ataque: {monstro.ataque}')
+                    window.FindElement('_m_def_').Update(value=f'Defesa: {monstro.defesa}')
+                    window.FindElement('_local_').Update(value=f'Você está num(a) {monstro.local}')
+                    window.FindElement('_info_batalha_').Update(value=f'Você se depara com um(a) {monstro.nome}')
+                    window.FindElement('_lutar_').Update(disabled=False)
+                    window.FindElement('_fugir_').Update(disabled=False)
+                    window.FindElement('_ok_').Update(disabled=True)
             else:
-                sg.popup('Você morreu!')
+                # ---------------- MORTE DO JOGADOR ---------------------- #
+                sg.popup(f'Você morreu {jogador.nome}!\n\n'
+                         f'Você atingiu nível {jogador.nivel}\n\n'
+                         f'Realizou {jogador.fugas_sucesso} fuga(s) com sucesso\n\n'
+                         f'Foi apanhado {jogador.fugas_falha} vez(es) tentando fugir\n\n'
+                         f'Acumulou {jogador.ataque} ponto(s) de ataque\n\n'
+                         f'Acumulou {jogador.defesa} ponto(s) de defesa\n\n'
+                         f'Derrotou {jogador.monstros_derrotados} monstro(s).\n\n'
+                         f'Coletou {jogador.itens_coletados} itens.')
                 window.close()
                 main()
 
