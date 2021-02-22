@@ -20,33 +20,65 @@ class Jogador:
     def vida(self) -> int:
         return self.__vida
 
+    @vida.setter
+    def vida(self, valor):
+        self.__vida = valor
+
     @property
     def ataque(self) -> int:
         return self.__ataque
+
+    @ataque.setter
+    def ataque(self, valor):
+        self.__ataque = valor
 
     @property
     def defesa(self) -> int:
         return self.__defesa
 
+    @defesa.setter
+    def defesa(self, valor):
+        self.__defesa = valor
+
     @property
     def pocoes(self) -> int:
         return self.__pocoes
+
+    @pocoes.setter
+    def pocoes(self, valor):
+        self.__pocoes = valor
 
     @property
     def monstros_derrotados(self) -> int:
         return self.__monstros_derrotados
 
+    @monstros_derrotados.setter
+    def monstros_derrotados(self, valor):
+        self.__monstros_derrotados = valor
+
     @property
     def itens_coletados(self) -> int:
         return self.__itens_coletados
+
+    @itens_coletados.setter
+    def itens_coletados(self, valor):
+        self.__itens_coletados = valor
 
     @property
     def experiencia(self) -> int:
         return self.__experiencia
 
+    @experiencia.setter
+    def experiencia(self, valor):
+        self.__experiencia = valor
+
     @property
     def nivel(self) -> int:
         return self.__nivel
+
+    @nivel.setter
+    def nivel(self, valor):
+        self.__nivel = valor
 
     def mostrar_itens(self):
         itens = ''
