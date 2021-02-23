@@ -12,7 +12,7 @@ class Jogador:
         self.__fugas_falha: int = 0
         self.__experiencia: int = 0
         self.__nivel: int = 0
-        self.__mochila: list = ['algo', 'algo2']
+        self.__mochila: list = []
 
     @property
     def nome(self) -> str:
@@ -98,8 +98,11 @@ class Jogador:
     def nivel(self, valor):
         self.__nivel = valor
 
+    def adicionar_na_mochila(self, valor):
+        self.__mochila.append(valor)
+
     def mostrar_itens(self):
         itens = ''
         for item in self.__mochila:
-            itens = itens + '\n' + item
+            itens = str(itens) + '\n\n' + str(item)
         return itens

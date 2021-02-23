@@ -112,12 +112,21 @@ def gerar_monstro():
         monstro_i_drop_chance = randint(0, 10)
         monstro_experiencia_drop = randint(10, 20)
 
+        if monstro_p_drop_chance in range(2):
+            pot_drop = 1
+        else:
+            pot_drop = 0
+        if monstro_i_drop_chance in range(2):
+            item = 1
+        else:
+            item = 0
+
         monstro = Monstro(nome=monstro_nome,
                           vida=monstro_vida,
                           ataque=monstro_ataque,
                           defesa=monstro_defesa,
-                          pocoes_drop=monstro_p_drop_chance,
-                          itens_drop=monstro_i_drop_chance,
+                          pocoes_drop=pot_drop,
+                          itens_drop=item,
                           experiencia_drop=monstro_experiencia_drop,
                           local=monstro_local)
         return monstro
@@ -133,12 +142,21 @@ def gerar_monstro():
         monstro_i_drop_chance = randint(0, 10)
         monstro_experiencia_drop = randint(10, 20)
 
+        if monstro_p_drop_chance in range(2):
+            pot_drop = 1
+        else:
+            pot_drop = 0
+        if monstro_i_drop_chance in range(2):
+            item_drop = 1
+        else:
+            item_drop = 0
+
         monstro = Monstro(nome=monstro_nome,
                           vida=monstro_vida,
                           ataque=monstro_ataque,
                           defesa=monstro_defesa,
-                          pocoes_drop=monstro_p_drop_chance,
-                          itens_drop=monstro_i_drop_chance,
+                          pocoes_drop=pot_drop,
+                          itens_drop=item_drop,
                           experiencia_drop=monstro_experiencia_drop,
                           local=monstro_local)
         return monstro
@@ -154,12 +172,21 @@ def gerar_monstro():
         monstro_i_drop_chance = randint(0, 10)
         monstro_experiencia_drop = randint(10, 20)
 
+        if monstro_p_drop_chance in range(2):
+            pot_drop = 1
+        else:
+            pot_drop = 0
+        if monstro_i_drop_chance in range(2):
+            item_drop = 1
+        else:
+            item_drop = 0
+
         monstro = Monstro(nome=monstro_nome,
                           vida=monstro_vida,
                           ataque=monstro_ataque,
                           defesa=monstro_defesa,
-                          pocoes_drop=monstro_p_drop_chance,
-                          itens_drop=monstro_i_drop_chance,
+                          pocoes_drop=pot_drop,
+                          itens_drop=item_drop,
                           experiencia_drop=monstro_experiencia_drop,
                           local=monstro_local)
         return monstro

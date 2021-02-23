@@ -1,5 +1,5 @@
 from random import choice, randint
-from time import sleep
+from itens import gen_item
 
 import PySimpleGUI as sg
 from jogador import Jogador
@@ -67,24 +67,33 @@ def game():
 
     # ------------ PLAYER STATUS/MOCHILA ------------- #
     layout_player_status = [
-        [sg.Text(f'Nome: {jogador.nome}')],
+        [sg.Text(f'Nome: {jogador.nome}',
+                 size=(30, 1),)],
         [sg.Text(f'Vida: {jogador.vida}',
+                 size=(30, 1),
                  key='_p_vida_')],
         [sg.Text(f'Ataque: {jogador.ataque}',
+                 size=(30, 1),
                  key='_p_atk_')],
         [sg.Text(f'Defesa: {jogador.defesa}',
+                 size=(30, 1),
                  key='_p_def_')],
         [sg.Text(f'Experiencia: {jogador.experiencia}',
+                 size=(30, 1),
                  key='_p_xp_')],
         [sg.Text(f'Nivel: {jogador.nivel}',
+                 size=(30, 1),
                  key='_p_nivel_')],
         [sg.Button(button_text='Mochila',
                    enable_events=True,
                    key='_mostrar_mochila_')]
     ]
     layout_player_mochila = [
-        [sg.Text(f'Quantidade de poções: {jogador.pocoes}\n'
-                 f'ITENS: {jogador.mostrar_itens()}')],
+        [sg.Text(f'Quantidade de poções: {jogador.pocoes}\n',
+                 key='_qnt_pocoes_')],
+        [sg.Text(f'ITENS: {jogador.mostrar_itens()}',
+                 size=(30, 10),
+                 key='_p_itens_')],
         [sg.Button(button_text='Usar poção',
                    enable_events=True,
                    key='_usar_pocao_'),
@@ -93,9 +102,8 @@ def game():
                    key='_mostrar_status_')]
     ]
     layout_player_info = [
-        [sg.Frame(title='# ---- STATUS ---- #',
-                  element_justification='c',
-                  border_width=0,
+        [sg.Frame(title='Status',
+                  border_width=1,
                   layout=layout_player_status,
                   visible=True,
                   key='_player_status_'),
@@ -285,12 +293,44 @@ def game():
                                          f'{monstro.nome} defendeu seu ataque!')
                 else:
                     # ------------ ADICIONANDO XP/ITEM/DROP E MOSTRANDO ------------ #
+                    # - XP!
                     jogador.monstros_derrotados += 1
                     jogador.experiencia += monstro.experiencia_drop
-                    sg.popup(f'Você derrotou {monstro.nome}!\n'
-                             f'Você recebeu {monstro.experiencia_drop} XP!\n'
-                             f'Você recebeu {monstro.pocoes_drop} POÇÕES\n'
-                             f'Você recebeu o item: {monstro.itens_drop}')
+                    window.FindElement('_p_xp_'). \
+                        Update(value=f'Experiencia: {jogador.experiencia}')
+
+                    # - POT!
+                    if monstro.pocoes_drop == 1:
+                        jogador.pocoes += 1
+                        window.FindElement('_qnt_pocoes_'). \
+                            Update(value=f'Quantidade de poções: {jogador.pocoes}\n')
+
+                    # - ITEM!
+                    if monstro.itens_drop == 1:
+                        jogador.itens_coletados += 1
+                        item = gen_item()
+                        if item.tipo == 'ataque':
+                            jogador.ataque += 1
+                            window.FindElement('_p_atk_'). \
+                                Update(value=f'Ataque: {jogador.ataque}')
+                        else:
+                            jogador.defesa += 1
+                            window.FindElement('_p_def_'). \
+                                Update(value=f'Defesa: {jogador.ataque}')
+
+                        jogador.adicionar_na_mochila(item)
+                        window.FindElement('_p_itens_'). \
+                            Update(value=f'ITENS: {jogador.mostrar_itens()}')
+                        # --- POP UP --- #
+                        sg.popup(f'Você derrotou {monstro.nome}!\n\n'
+                                 f'Você recebeu {monstro.experiencia_drop} XP!\n\n'
+                                 f'Você recebeu {monstro.pocoes_drop} POÇÕES\n\n'
+                                 f'Você recebeu o item:\n{item.nome}\n')
+                    else:
+                        # --- POP UP --- #
+                        sg.popup(f'Você derrotou {monstro.nome}!\n\n'
+                                 f'Você recebeu {monstro.experiencia_drop} XP!\n\n'
+                                 f'Você recebeu {monstro.pocoes_drop} POÇÕES\n')
 
                     # ---------- GERANDO A PROXIMA BATALHA ----------- #
                     monstro = gerar_monstro()
