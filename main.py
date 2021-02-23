@@ -5,19 +5,12 @@ import PySimpleGUI as sg
 from jogador import Jogador
 from monstro import gerar_monstro
 
-# ----- Varieveis Teste ------ #
+# ----- Variaveis Teste ------ #
 jogador = None
 monstro = gerar_monstro()
 
 
-# --------- SISTEMA DE BATALHA ---------- #
-def batalha(escolha):
-    if escolha == 1:
-        pass
-    else:
-        pass
-
-
+# --------------------------------------------- TELA DO MENU --------------------------------------------------------- #
 def main():
     global jogador
     nome_random = choice(['Arther', 'Frery', 'Remonnet', 'Richessa', 'Adelie', 'Mirielda'])
@@ -49,6 +42,7 @@ def main():
     window.Close()
 
 
+# ------------------------------------------- TELA DO GAMEPLAY ------------------------------------------------------- #
 def game():
     # -------- VARIAVEIS ----------- #
     global jogador
