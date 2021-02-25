@@ -102,15 +102,15 @@ def gerar_monstro():
 
     dificuldade = randint(1, 100)
     # ---------------- DIFICULDADE: FÁCIL ---------------- #
-    if dificuldade in range(1, 70):
+    if dificuldade in range(1, 80):
         monstro_local = choice(monstro_info['locais_facil'])
         monstro_nome = choice(monstro_info['monstros_facil'])
-        monstro_vida = randint(4, 6)
+        monstro_vida = randint(3, 5)
         monstro_ataque = randint(0, 1)
         monstro_defesa = randint(0, 1)
         monstro_p_drop_chance = randint(0, 10)
         monstro_i_drop_chance = randint(0, 10)
-        monstro_experiencia_drop = randint(10, 20)
+        monstro_experiencia_drop = randint(10, 40)
 
         if monstro_p_drop_chance in range(2):
             pot_drop = 1
@@ -132,15 +132,15 @@ def gerar_monstro():
         return monstro
 
         # ---------------- DIFICULDADE: MÉDIA ---------------- #
-    elif dificuldade in range(71, 90):
+    elif dificuldade in range(81, 95):
         monstro_local = choice(monstro_info['locais_medio'])
         monstro_nome = choice(monstro_info['monstros_medio'])
-        monstro_vida = randint(4, 6)
+        monstro_vida = randint(5, 8)
         monstro_ataque = randint(0, 3)
         monstro_defesa = randint(0, 3)
-        monstro_p_drop_chance = randint(0, 10)
-        monstro_i_drop_chance = randint(0, 10)
-        monstro_experiencia_drop = randint(10, 20)
+        monstro_p_drop_chance = randint(0, 8)
+        monstro_i_drop_chance = randint(0, 8)
+        monstro_experiencia_drop = randint(40, 60)
 
         if monstro_p_drop_chance in range(2):
             pot_drop = 1
@@ -165,12 +165,12 @@ def gerar_monstro():
     else:
         monstro_local = choice(monstro_info['locais_dificil'])
         monstro_nome = choice(monstro_info['monstros_dificil'])
-        monstro_vida = randint(4, 6)
-        monstro_ataque = randint(2, 4)
-        monstro_defesa = randint(1, 3)
-        monstro_p_drop_chance = randint(0, 10)
-        monstro_i_drop_chance = randint(0, 10)
-        monstro_experiencia_drop = randint(10, 20)
+        monstro_vida = randint(10, 16)
+        monstro_ataque = randint(2, 6)
+        monstro_defesa = randint(1, 5)
+        monstro_p_drop_chance = randint(0, 6)
+        monstro_i_drop_chance = randint(0, 6)
+        monstro_experiencia_drop = randint(60, 90)
 
         if monstro_p_drop_chance in range(2):
             pot_drop = 1

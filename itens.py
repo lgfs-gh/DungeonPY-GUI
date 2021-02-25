@@ -53,8 +53,8 @@ def gen_item():
                  'do Vácuo']
 
     if tipo == 1:
-        item = Item(f'{choice(nomes_ataque)} {choice(adjetivos)} | Ataque + 1', 'ataque')
+        item = Item(f'{choice(nomes_ataque)} {choice(adjetivos)} | ATK + 1', 'ataque')
         return item
     else:
-        item = Item(f'{choice(nomes_defesa)} {choice(adjetivos)} | Defesa + 1', 'defesa')
+        item = Item(f'{choice(nomes_defesa)} {choice(adjetivos)} | DEF + 1', 'defesa')
         return item

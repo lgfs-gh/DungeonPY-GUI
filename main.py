@@ -62,7 +62,7 @@ def game():
     # ------------ PLAYER STATUS/MOCHILA ------------- #
     layout_player_status = [
         [sg.Text(f'Nome: {jogador.nome}',
-                 size=(30, 1),)],
+                 size=(30, 1), )],
         [sg.Text(f'Vida: {jogador.vida}',
                  size=(30, 1),
                  key='_p_vida_')],
@@ -76,7 +76,7 @@ def game():
                  size=(30, 1),
                  key='_p_xp_')],
         [sg.Text(f'Nivel: {jogador.nivel}',
-                 size=(30, 1),
+                 size=(30, 4),
                  key='_p_nivel_')],
         [sg.Button(button_text='Mochila',
                    enable_events=True,
@@ -96,11 +96,9 @@ def game():
                    key='_mostrar_status_')]
     ]
     layout_player_info = [
-        [sg.Frame(title='Status',
-                  border_width=1,
-                  layout=layout_player_status,
-                  visible=True,
-                  key='_player_status_'),
+        [sg.Column(layout=layout_player_status,
+                   visible=True,
+                   key='_player_status_'),
          sg.Frame(title='Mochila',
                   layout=layout_player_mochila,
                   visible=False,
@@ -110,7 +108,8 @@ def game():
     layout_player_completo = [
         [sg.Frame(title='PLAYER IMAGEM!',
                   layout=layout_player_imagem)],
-        [sg.Frame(title='PLAYER INFO',
+        [sg.Frame(title='Status',
+                  border_width=3,
                   layout=layout_player_info)]
     ]
     # ------------ INFORMACOES DE BATALHA ------------- #
@@ -150,41 +149,43 @@ def game():
     layout_monstro_status = [
         [sg.Text(f'Nome: {monstro.nome}',
                  size=(30, 1),
-                 justification='c',
                  key='_m_nome_')],
         [sg.Text(f'Vida: {monstro.vida}',
+                 size=(30, 1),
                  key='_m_vida_')],
         [sg.Text(f'Ataque: {monstro.ataque}',
+                 size=(30, 1),
                  key='_m_atk_')],
         [sg.Text(f'Defesa: {monstro.defesa}',
+                 size=(30, 10),
                  key='_m_def_')]
     ]
     layout_monstro_info = [
         [sg.Frame(title='STATUS',
-                  title_location='n',
-                  element_justification='c',
-                  border_width=0,
+                  # title_location='n',
+                  border_width=3,
                   layout=layout_monstro_status)]
     ]
     layout_monstro_completo = [
         [sg.Frame(title='MONSTRO IMAGEM!',
                   layout=layout_monstro_imagem)],
-        [sg.Frame(title='MONSTRO INFO!',
-                  element_justification='c',
-                  layout=layout_monstro_info)]
+        [sg.Column(layout=layout_monstro_info)]
     ]
 
     # ============================== LAYOUT GLOBAL JOGO ============================== #
     layout = [
         [sg.Frame(title='PLAYER',
                   element_justification='c',
+                  border_width=6,
                   layout=layout_player_completo
                   ),
          sg.Frame(title='BATALHA',
                   element_justification='c',
+                  border_width=6,
                   layout=layout_batalha_completo),
          sg.Frame(title='MONSTRO',
                   element_justification='c',
+                  border_width=6,
                   layout=layout_monstro_completo)
          ]
     ]
@@ -205,6 +206,19 @@ def game():
         if event == '_mostrar_status_':
             window.FindElement('_player_mochila_').Update(visible=False)
             window.FindElement('_player_status_').Update(visible=True)
+        # ----------- USANDO POÇÃO ------------- #
+        if event == '_usar_pocao_':
+            if jogador.pocoes > 0:
+                jogador.vida += 2
+                jogador.pocoes -= 1
+                window.FindElement('_p_vida_'). \
+                    Update(value=f'Vida: {jogador.vida}')
+                window.FindElement('_qnt_pocoes_'). \
+                    Update(value=f'Quantidade de poções: {jogador.pocoes}\n')
+                sg.popup('Você usou uma poção.\n'
+                         '\n+ 2 pontos de vida!')
+            else:
+                sg.popup('Você não tem poções!')
         # =========================== EVENTOS BATALHA =========================== #
         # ------------- ESCOLHENDO LUTAR ------------- #
         if event == '_lutar_':
@@ -219,7 +233,7 @@ def game():
             window.FindElement('_fugir_').Update(disabled=True)
             window.FindElement('_ok_').Update(disabled=True)
             sucesso = randint(1, 6)
-            if sucesso in range(1, 4):
+            if sucesso in range(1, 5):
                 # FUGIU COM SUCESSO
                 jogador.fugas_sucesso += 1
                 window.FindElement('_lutar_').Update(disabled=False)
@@ -292,7 +306,18 @@ def game():
                     jogador.experiencia += monstro.experiencia_drop
                     window.FindElement('_p_xp_'). \
                         Update(value=f'Experiencia: {jogador.experiencia}')
-
+                    if jogador.experiencia >= 100:
+                        xp = jogador.experiencia - 100
+                        jogador.experiencia = xp
+                        jogador.nivel += 1
+                        jogador.vida = 10
+                        window.FindElement('_p_vida_'). \
+                            Update(value=f'Vida: {jogador.vida}\n')
+                        window.FindElement('_p_nivel_'). \
+                            Update(value=f'Nivel: {jogador.nivel}\n')
+                        window.FindElement('_p_xp_'). \
+                            Update(value=f'Experiencia: {jogador.experiencia}\n')
+                        sg.popup('Você subiu de nível!')
                     # - POT!
                     if monstro.pocoes_drop == 1:
                         jogador.pocoes += 1
@@ -310,7 +335,7 @@ def game():
                         else:
                             jogador.defesa += 1
                             window.FindElement('_p_def_'). \
-                                Update(value=f'Defesa: {jogador.ataque}')
+                                Update(value=f'Defesa: {jogador.defesa}')
 
                         jogador.adicionar_na_mochila(item)
                         window.FindElement('_p_itens_'). \
@@ -339,6 +364,7 @@ def game():
                     window.FindElement('_ok_').Update(disabled=True)
             else:
                 # ---------------- MORTE DO JOGADOR ---------------------- #
+                monstro = gerar_monstro()
                 sg.popup(f'Você morreu {jogador.nome}!\n\n'
                          f'Você atingiu nível {jogador.nivel}\n\n'
                          f'Realizou {jogador.fugas_sucesso} fuga(s) com sucesso\n\n'
