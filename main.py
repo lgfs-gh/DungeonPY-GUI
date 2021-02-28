@@ -83,26 +83,27 @@ def game():
                    key='_mostrar_mochila_')]
     ]
     layout_player_mochila = [
-        [sg.Text(f'Quantidade de poções: {jogador.pocoes}\n',
-                 key='_qnt_pocoes_')],
-        [sg.Text(f'ITENS: {jogador.mostrar_itens()}',
-                 size=(30, 10),
-                 key='_p_itens_')],
         [sg.Button(button_text='Usar poção',
                    enable_events=True,
                    key='_usar_pocao_'),
          sg.Button(button_text='Status',
                    enable_events=True,
-                   key='_mostrar_status_')]
+                   key='_mostrar_status_')],
+        [sg.Text(f'Quantidade de poções: {jogador.pocoes}\n',
+                 key='_qnt_pocoes_')],
+        [sg.Text(f'ITENS: {jogador.mostrar_itens()}',
+                 size=(30, 28),
+                 key='_p_itens_')],
     ]
     layout_player_info = [
         [sg.Column(layout=layout_player_status,
                    visible=True,
                    key='_player_status_'),
-         sg.Frame(title='Mochila',
-                  layout=layout_player_mochila,
-                  visible=False,
-                  key='_player_mochila_')
+         sg.Column(layout=layout_player_mochila,
+                   scrollable=True,
+                   vertical_scroll_only=True,
+                   visible=False,
+                   key='_player_mochila_')
          ],
     ]
     layout_player_completo = [
