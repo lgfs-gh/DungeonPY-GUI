@@ -5,7 +5,7 @@ class Jogador:
         self.__vida: int = 10
         self.__ataque: int = 1
         self.__defesa: int = 1
-        self.__pocoes: int = 0
+        self.__pocoes: int = 3
         self.__monstros_derrotados: int = 0
         self.__itens_coletados: int = 0
         self.__fugas_sucesso: int = 0

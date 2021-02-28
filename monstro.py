@@ -108,8 +108,8 @@ def gerar_monstro():
         monstro_vida = randint(3, 5)
         monstro_ataque = randint(0, 1)
         monstro_defesa = randint(0, 1)
-        monstro_p_drop_chance = randint(0, 10)
-        monstro_i_drop_chance = randint(0, 10)
+        monstro_p_drop_chance = randint(0, 12)
+        monstro_i_drop_chance = randint(0, 20)
         monstro_experiencia_drop = randint(10, 40)
 
         if monstro_p_drop_chance in range(2):
@@ -139,7 +139,7 @@ def gerar_monstro():
         monstro_ataque = randint(0, 3)
         monstro_defesa = randint(0, 3)
         monstro_p_drop_chance = randint(0, 8)
-        monstro_i_drop_chance = randint(0, 8)
+        monstro_i_drop_chance = randint(0, 16)
         monstro_experiencia_drop = randint(40, 60)
 
         if monstro_p_drop_chance in range(2):
@@ -168,8 +168,8 @@ def gerar_monstro():
         monstro_vida = randint(10, 16)
         monstro_ataque = randint(2, 6)
         monstro_defesa = randint(1, 5)
-        monstro_p_drop_chance = randint(0, 6)
-        monstro_i_drop_chance = randint(0, 6)
+        monstro_p_drop_chance = randint(0, 4)
+        monstro_i_drop_chance = randint(0, 4)
         monstro_experiencia_drop = randint(60, 90)
 
         if monstro_p_drop_chance in range(2):
